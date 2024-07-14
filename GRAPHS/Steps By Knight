@@ -1,0 +1,36 @@
+class Solution 
+{
+    public:
+    //Function to find out minimum steps Knight needs to reach target position.
+	int minStepToReachTarget(vector<int>&KnightPos,vector<int>&TargetPos,int N)
+	{
+	    //Since the board is 1-based indexed, the valid range for positions is from 1 to N, inclusive.
+	    vector<vector<bool>> visited(N+1 , vector<bool>(N+1 , false));
+	    vector<vector<int>> dirs = {{1,2},{2,1},{-1,2},{2,-1},{1,-2},{-2,1},{-1,-2},{-2,-1}};
+	    int steps = 0;
+	    queue<pair<pair<int, int>, int>> q;
+	    q.push({{KnightPos[0], KnightPos[1]}, 0});
+	    visited[KnightPos[0]][KnightPos[1]] = true;
+	    
+	    while(!q.empty()){
+	        int i = q.front().first.first;
+	        int j = q.front().first.second;
+	        int steps = q.front().second;
+	        q.pop();
+	        // If the current position is the target position
+            if (i == TargetPos[0] && j == TargetPos[1]) {
+                return steps;
+            }
+	        for(auto &dir : dirs){
+	            int new_i = i + dir[0];
+	            int new_j = j + dir[1];
+	            if(new_i >= 1 && new_i <= N && new_j >= 1 && new_j <= N && !visited[new_i][new_j]){
+	                visited[new_i][new_j] = true;
+	                q.push({{new_i, new_j}, steps + 1});
+	            }
+	        }
+	    }
+	    return -1;
+	    
+	}
+};
