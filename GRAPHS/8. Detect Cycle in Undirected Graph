@@ -1,6 +1,5 @@
 class Solution {
   public:
-    // Function to detect cycle in an undirected graph.
     bool cycle(int V, vector<int> adj[] , vector<bool>&vis , int start , int parent){
         vis[start] = true;
         for(int i : adj[start]){
