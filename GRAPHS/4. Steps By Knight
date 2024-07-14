@@ -1,7 +1,6 @@
 class Solution 
 {
     public:
-    //Function to find out minimum steps Knight needs to reach target position.
 	int minStepToReachTarget(vector<int>&KnightPos,vector<int>&TargetPos,int N)
 	{
 	    //Since the board is 1-based indexed, the valid range for positions is from 1 to N, inclusive.
