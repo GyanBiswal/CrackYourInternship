@@ -1,0 +1,24 @@
+class Solution {
+  public:
+    // Function to return a list containing the DFS traversal of the graph.
+    void dfs(int V, vector<int> adj[] ,vector<int>&ans ,vector<bool>&vis , int start){
+        vis[start] = true; 
+        ans.push_back(start);
+        for(int i : adj[start]){
+            if(!vis[i]){
+                dfs(V , adj , ans , vis , i);
+            }
+        }
+    }
+    vector<int> dfsOfGraph(int V, vector<int> adj[]) {
+        // Code here
+        vector<bool>vis(V , false);
+        vector<int>ans;
+        for(int i = 0; i < V; i++){
+            if(!vis[i]){
+                dfs(V , adj , ans , vis , i);
+            }
+        }
+        return ans;
+    }
+};
