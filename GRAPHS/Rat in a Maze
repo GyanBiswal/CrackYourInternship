@@ -1,0 +1,41 @@
+class Solution{
+    public:
+    vector<string>result;
+    bool isSafe(int i, int j, int n, vector<vector<int>>& m) {
+        return (i >= 0 && i < n && j >= 0 && j < n && m[i][j] == 1);
+    }
+    void solve(int i , int j , vector<vector<int>>& m, int n , string path){
+        // If out of bounds or on a blocked cell
+        if (!isSafe(i, j, n, m)) return;
+        
+        // If reached the destination
+        if (i == n - 1 && j == n - 1) {
+            result.push_back(path);
+            return;
+        }
+        
+        // Mark the cell as visited
+        m[i][j] = 0;
+        
+        // Move Down
+        solve(i + 1, j, m, n, path + 'D');
+        
+        // Move Up
+        solve(i - 1, j, m, n, path + 'U');
+        
+        // Move Right
+        solve(i, j + 1, m, n, path + 'R');
+        
+        // Move Left
+        solve(i, j - 1, m, n, path + 'L');
+        
+        // Unmark the cell (backtrack)
+        m[i][j] = 1;
+    }
+    vector<string> findPath(vector<vector<int>> &m, int n) {
+        if (m[0][0] == 0 || m[n-1][n-1] == 0) return result; // If start or end is blocked
+        string path = "";
+        solve(0 , 0 , m , n , path);
+        return result;
+    }
+};
