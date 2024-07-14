@@ -1,0 +1,30 @@
+class Solution {
+public:
+    void fillDfs(vector<vector<int>>& image , int sr , int sc , int color , int currentColor){
+        int row = image.size();
+        int col = image[0].size();
+        if(sr >= 0 && sr < row && sc >= 0 && sc < col && image[sr][sc] == currentColor){
+            image[sr][sc] = color;
+            fillDfs(image , sr + 1 , sc , color , currentColor);
+            fillDfs(image , sr - 1 , sc , color , currentColor);
+            fillDfs(image , sr , sc + 1 , color , currentColor);
+            fillDfs(image , sr , sc - 1 , color , currentColor);
+        }
+    }
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+        int row = image.size();
+        if (row == 0) return image; // Handle edge case of empty image
+        
+        int col = image[0].size();
+        if (col == 0) return image; // Handle edge case of empty image
+        
+        int currentColor = image[sr][sc];
+        
+        // Perform flood fill starting from (sr, sc)
+        if (currentColor != color) { // Avoid unnecessary fill if already same color
+            fillDfs(image, sr, sc, color, currentColor);
+        }
+        
+        return image;
+    }
+};
