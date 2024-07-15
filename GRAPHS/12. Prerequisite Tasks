@@ -1,0 +1,47 @@
+class Solution {
+public:
+	bool isPossible(int N,int P, vector<pair<int, int> >& prerequisites) {
+	    // Code here
+	    
+	    // Initialise the adjacency list
+	    vector<vector<int>>adj(N);
+	    
+	    // Build the graph
+	   for(auto &it : prerequisites){
+	        adj[it.second].push_back(it.first);
+	    }
+	    
+	    
+	    // 1. Calculate indegree
+	    vector<int>indegree(N);
+	    for(int i = 0; i < N; i++){
+	        for(auto &it : adj[i]){
+	            indegree[it]++;
+	        }
+	    }
+	    
+	    // 2. Push the node / nodes having indegree = 0
+	    queue<int>q;
+	    for(int i = 0; i < N; i++){
+	        if(indegree[i] == 0){
+	            q.push(i);
+	        }
+	    }
+	    
+	    // 3. Perform Topological Sorting
+	    vector<int>ans;
+	    while(!q.empty()){
+	        int curr = q.front();
+	        q.pop();
+	        ans.push_back(curr);
+	        for(int i : adj[curr]){
+	            indegree[i]--;
+	            if(indegree[i] == 0){
+	                q.push(i);
+	            }
+	        }
+	    }
+	    
+	    return ans.size() == N;
+	}
+};
