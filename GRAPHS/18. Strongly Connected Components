@@ -1,0 +1,58 @@
+class Solution
+{
+    private:
+	void dfs(vector<vector<int>>& adj , vector<bool> &vis , stack<int> &s,  int curr){
+	    vis[curr] = true;
+	    for(auto &i : adj[curr]){
+	        if(!vis[i]){
+	            dfs(adj , vis , s , i);
+	        }
+	    }
+	    s.push(curr);
+	}
+	
+	void dfs2(vector<vector<int>>& revAdj , vector<bool> &vis , int curr){
+	    vis[curr] = true;
+	    for(auto &i : revAdj[curr]){
+	        if(!vis[i]){
+	            dfs2(revAdj , vis , i);
+	        }
+	    }
+	}
+	
+	public:
+	//Function to find number of strongly connected components in the graph.
+	
+    int kosaraju(int V, vector<vector<int>>& adj)
+    {
+        // Step 1: Perform DFS to get the finishing times of nodes
+        vector<bool> vis(V, false);
+        stack<int>s;
+        for(int  i = 0; i < V; i++){
+            if(!vis[i]){
+                dfs(adj , vis , s , i);
+            }
+        }
+        
+        // 2. Reverse the edges of the graph
+        vector<vector<int>> revAdj(V);
+        for(int i = 0; i < V; i++){
+            vis[i] = false; // Reset the visited array for reuse
+            for(auto &it : adj[i]){
+               // Reverse the edge: i -> it becomes it -> i
+                revAdj[it].push_back(i);
+            }
+        }
+        // 3. Calculate SCC
+        int scc = 0;
+        while(!s.empty()){
+            int curr = s.top();
+            s.pop();
+            if(!vis[curr]){
+                dfs2(revAdj , vis , curr);
+                scc++;
+            }
+        }
+        return scc;
+    }
+};
