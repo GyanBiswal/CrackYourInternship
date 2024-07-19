@@ -1,0 +1,32 @@
+class Solution
+{
+	public:
+	//Function to find sum of weights of edges of the Minimum Spanning Tree.
+    int spanningTree(int V, vector<vector<int>> adj[])
+    {
+        int sum = 0;
+        vector<bool> vis(V, false);
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq; // {weight, node}
+        pq.push({0, 0}); // Start with node 0 and weight 0
+    
+        while (!pq.empty()) {
+            auto curr = pq.top();
+            pq.pop();
+            int currNode = curr.second;
+            int weight = curr.first;
+            
+            if (vis[currNode]) continue; // Skip if already visited
+            vis[currNode] = true; // Mark the node as visited
+            sum += weight; // Add the weight to the sum
+            
+            for (auto &neigh : adj[currNode]) {
+                int adjNode = neigh[0];
+                int adjWeight = neigh[1];
+                if (!vis[adjNode]) {
+                    pq.push({adjWeight, adjNode}); // Push with weight first
+                }
+            }
+        }
+        return sum;
+    }
+};
