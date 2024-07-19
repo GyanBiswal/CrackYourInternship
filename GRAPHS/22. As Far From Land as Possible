@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int maxDistance(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+
+        vector<vector<int>>result(n , vector<int>(m , -1));
+        vector<vector<int>>dirs = {{-1,0},{1,0},{0,-1},{0,1}};
+        queue<pair<int,int>>q;
+        int maxi = -1;
+
+        // Initialize the queue with all land cells
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(grid[i][j] == 1){
+                    result[i][j] = 0;
+                    q.push({i , j});
+                }
+            }
+        }
+
+        // If there are no water or no land cells, return -1
+        if(q.empty() || q.size() == n * m) {
+            return -1;
+        }
+
+        // BFS traversal
+        while(!q.empty()){
+            int i = q.front().first;
+            int j = q.front().second;
+            q.pop();
+
+            for(auto &dir : dirs){
+                int new_i = i + dir[0];
+                int new_j = j + dir[1];
+
+                if(new_i >= 0 && new_i < n && new_j >= 0 && new_j < m && result[new_i][new_j] == -1){
+                    q.push({new_i , new_j});
+                    result[new_i][new_j] = result[i][j] + 1;
+                    maxi = max(maxi , result[new_i][new_j]);
+                }
+            }
+        }
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(result[i][j] > maxi){
+                    maxi = result[i][j];
+                }
+            }
+        }
+        return maxi;
+    }
+};
