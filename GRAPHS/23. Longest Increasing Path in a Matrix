@@ -1,0 +1,37 @@
+class Solution {
+public:
+    // Directions for moving in the matrix: up, down, left, right
+    vector<pair<int, int>> dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+    int dfs(vector<vector<int>>& matrix , int i , int j , vector<vector<int>>& dp){
+        int n = matrix.size();
+        int m = matrix[0].size();
+        if(dp[i][j] != -1) return dp[i][j];
+        int maxLen = 1;
+
+        for(auto &dir : dirs){
+            int x = i + dir.first;
+            int y = j + dir.second;
+
+            if(x >= 0 && x < n && y >= 0 && y < m && matrix[x][y] > matrix[i][j]){
+                int currLen = 1 + dfs(matrix , x , y , dp);
+                maxLen = max(maxLen , currLen);
+            }
+        }
+        return dp[i][j] = maxLen;
+    }
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        int m = matrix[0].size();
+        vector<vector<int>>dp(n , vector<int>(m , -1));
+        int maxLength = 1;
+
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                int currLen = dfs(matrix , i , j , dp);
+                maxLength = max(currLen , maxLength);
+            }
+        }
+        return maxLength;
+    }
+};
