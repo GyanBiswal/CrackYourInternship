@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<int> findDuplicates(vector<int>& nums) {
+        vector<int>res;
+        for (int num : nums) {
+            int index = abs(num) - 1;
+            if (nums[index] < 0){
+                res.push_back(index + 1);
+            }
+            nums[index] = -nums[index];
+        }
+        return res;
+
+
+        // vector<int> result;
+        // unordered_map<int, int> countMap;
+        // for (int num : nums) {
+        //     countMap[num]++;
+        // }
+        // for (auto pair : countMap) {
+        //     if (pair.second == 2) {
+        //         result.push_back(pair.first);
+        //     }
+        // }
+        // return result;
+    }
+};
