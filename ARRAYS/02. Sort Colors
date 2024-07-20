@@ -1,0 +1,25 @@
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int curr = 0;
+        int oneIndex = 0;
+        int twoIndex = nums.size() - 1;
+
+        while(curr <= twoIndex){
+            if(nums[curr] == 0){
+                swap(nums , curr++ , oneIndex++);
+            }
+            else if(nums[curr] == 2){
+                swap(nums , curr , twoIndex--);
+            }
+            else{
+                curr++;
+            }
+        }
+    }
+    void swap(vector<int>& nums , int start , int end){
+        int temp = nums[start];
+        nums[start] = nums[end];
+        nums[end] = temp;
+    }
+};
