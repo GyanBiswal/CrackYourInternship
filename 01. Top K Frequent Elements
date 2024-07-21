@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        vector<int>ans;
+        unordered_map<int,int>map;
+        
+        for(int i : nums){
+            map[i]++;
+        }
+
+        // Min-Heap
+        priority_queue<pair<int, int> , vector<pair<int,int>> , greater<pair<int,int>>> pq;
+        
+        for(auto &pair : map){
+            pq.push({pair.second, pair.first}); // first = frequency and second is element
+            if(pq.size() > k) pq.pop();
+        }
+
+        while(!pq.empty()){
+            ans.push_back(pq.top().second);
+            pq.pop();
+        }
+        return ans;
+    }
+};
+
+/*
+
+Time Complexity : O(n) + O(nlogk) + O(klogk) = O(nlogk)
+1.Iterating through array takes O(n) , 
+2. Each push operation in heap takes O(logk) , n the worst case, if all elements in nums are unique, 
+   so pushing n elements into takes O(nlogk) time
+3. Extracting k frequent elements from heap takes O(klogk) time.
+
+Space complexity : O(n) + O(k) + O(k) = O(n)
+ frequency map + Heap storing k elements + ans array of size k
+
+*/
