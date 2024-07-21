@@ -1,0 +1,37 @@
+class Solution {
+public:
+    bool checkBfs(int V , vector<int>adj[] , int start , vector<int>&color){
+        queue<int>q;
+        q.push(start);
+        color[start] = 1;
+        while(!q.empty()){
+            int currNode = q.front();
+            q.pop();
+            
+            for(auto i : adj[currNode]){
+                // if adj node is not colored , then color it with opposite color
+                if(color[i] == 0){
+                    color[i] = -color[currNode];
+                    q.push(i);
+                }
+                // if adj node is also of same color , return false
+                else if(color[i] == color[currNode]){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+	bool isBipartite(int V, vector<int>adj[]){
+	    vector<int>color(V , 0);
+	    for(int i = 0; i < V; i++){
+	        if(color[i] == 0){
+	            if(!checkBfs(V , adj , i , color)){
+	            return false;
+	        }
+	        }
+	    }
+	    return true;
+	}
+
+};
