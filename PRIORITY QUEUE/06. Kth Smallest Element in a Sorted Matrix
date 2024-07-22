@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        int n = matrix.size();
+        // Min-heap to store elements along with their row and column indices
+        priority_queue<vector<int>, vector<vector<int>>, greater<>> minHeap;
+
+        // Initialize the heap with the first element of each row
+        for(int i = 0; i < n; i++){
+            minHeap.push({matrix[i][0] , i , 0}); // first value of every row , row no. , col no.
+        }
+
+        int ans;
+        for (int i = 1; i <= k; ++i) {
+            auto top = minHeap.top(); 
+            minHeap.pop();
+            int r = top[1];
+            int c = top[2];
+            ans = top[0];
+            if (c + 1 < n) minHeap.push({matrix[r][c + 1], r, c + 1});
+        }
+        return ans;
+    }
+};
