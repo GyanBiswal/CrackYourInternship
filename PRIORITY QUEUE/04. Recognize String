@@ -1,0 +1,42 @@
+class Solution {
+public:
+    string reorganizeString(string s) {
+        unordered_map<char, int> count;
+        for (char c : s) {
+            count[c]++;
+        }
+
+        // Max-heap to store characters based on their frequencies
+        priority_queue<pair<int, char>> maxHeap;
+        for (auto& it : count) {
+            maxHeap.push({it.second, it.first});
+        }
+
+        pair<int, char> prev = {-1, '#'}; // Previous character and its remaining count
+        string result;
+
+        while (!maxHeap.empty()) {
+            auto curr = maxHeap.top();
+            maxHeap.pop();
+
+            // Append current character to the result
+            result += curr.second;
+
+            // If the previous character still has remaining count, push it back to the heap
+            if (prev.first > 0) {
+                maxHeap.push(prev);
+            }
+
+            // Update current character's remaining count and set it as previous
+            curr.first--;
+            prev = curr;
+        }
+        
+        if(result.length() == s.length()){
+            return result;
+        }
+        else{
+            return "";
+        }
+    }
+};
