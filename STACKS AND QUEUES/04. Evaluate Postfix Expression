@@ -1,0 +1,37 @@
+class Solution
+{
+    public:
+    //Function to evaluate a postfix expression.
+    int evaluatePostfix(string S)
+    {
+        stack<int> st;
+    
+        for (char c : S) {
+            if (isdigit(c)) {
+                st.push(c - '0'); // Convert char to int and push onto stack
+            } else {
+                int a = st.top(); 
+                st.pop();
+                int b = st.top(); 
+                st.pop();
+                
+                switch (c) {
+                    case '+':
+                        st.push(a + b);
+                        break;
+                    case '-':
+                        st.push(b - a);
+                        break;
+                    case '*':
+                        st.push(a * b);
+                        break;
+                    case '/':
+                        st.push(b / a);
+                        break;
+                }
+            }
+        }
+    
+        return st.top();
+    }
+};
