@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        stack<int>s; // stack to keep track of elements in decreasing order
+        unordered_map<int , int>map; // map to store next greater element for each element in nums2
+
+        for(int i : nums2){
+            while(!s.empty() && s.top() < i){
+                map[s.top()] = i;
+                s.pop();
+            }
+            s.push(i);
+        }
+
+        for(int i = 0; i < nums1.size(); i++){
+            if(map.count(nums1[i])){
+                nums1[i] = map[nums1[i]];
+            }
+            else{
+                nums1[i] = -1;
+            }
+        }
+        return nums1;
+    }
+};
