@@ -4,7 +4,8 @@ public:
     stack<int>output;
     int firstElement = -1;
     MyQueue() {
-        
+
+
     }
     
     void push(int x) {
