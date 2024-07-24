@@ -1,0 +1,28 @@
+class Solution {
+public:
+    string processString(string &str){
+        stack<char>result;
+        for(char c : str){
+            if(c == '#'){
+                if(!result.empty()){
+                    result.pop();
+                }
+            }
+            else{
+                result.push(c);
+            }
+        }
+    
+        string finalString;
+        while(!result.empty()){
+            finalString += result.top();
+            result.pop();
+        }
+        reverse(finalString.begin() , finalString.end());
+        return finalString;
+    }
+    bool backspaceCompare(string s, string t) {
+        
+        return processString(s) == processString(t);
+    }
+};
