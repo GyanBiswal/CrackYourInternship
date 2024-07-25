@@ -1,0 +1,26 @@
+class Solution {
+public:
+    string removeDuplicates(string s, int k) {
+        stack<pair<char , int>>st;
+        for(char c : s){
+            if(!st.empty() && st.top().first == c){
+                st.top().second++;
+                if(st.top().second == k){
+                    st.pop();
+                }
+            }
+            else{
+                st.push({c , 1});
+            }
+        }
+
+        string result;
+        while(!st.empty()){
+            // ( No. of times the character should be appended , The character to append )
+            result.append(st.top().second , st.top().first); 
+            st.pop();
+        }
+        reverse(result.begin() , result.end());
+        return result;
+    }
+};
