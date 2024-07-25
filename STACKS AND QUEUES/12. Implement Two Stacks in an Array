@@ -1,0 +1,43 @@
+class twoStacks {
+  public:
+    int *arr;
+    int left , right;
+    int size;
+
+    twoStacks(int n=100) {
+        arr = new int[n];
+        size = n;
+        left = -1;
+        right = n;
+    }
+
+    // Function to push an integer into the stack1.
+    void push1(int x) {
+        if(left + 1 == right) return;
+        left++;
+        arr[left] = x;
+    }
+
+    // Function to push an integer into the stack2.
+    void push2(int x) {
+        if(left + 1 == right) return;
+        right--;
+        arr[right] = x;
+    }
+
+    // Function to remove an element from top of the stack1.
+    int pop1() {
+        if(left == -1) return -1; // stack is empty
+        int val = arr[left];
+        left--;
+        return val;
+    }
+
+    // Function to remove an element from top of the stack2.
+    int pop2() {
+        if(right == size) return -1; // stack is empty
+        int val = arr[right];
+        right++;
+        return val;
+    }
+};
