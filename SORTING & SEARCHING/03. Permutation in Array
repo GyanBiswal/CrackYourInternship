@@ -1,0 +1,19 @@
+class Solution {
+  public:
+    bool isPossible(long long a[], long long b[], int n, long long k) {
+
+        // Sort a in ascending order
+        sort(a, a + n);
+    
+        // Sort b in descending order
+        sort(b, b + n, std::greater<long long>());
+    
+        // Check if every pair satisfies the condition a[i] + b[i] >= k
+        for (int i = 0; i < n; i++) {
+            if (a[i] + b[i] < k) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
