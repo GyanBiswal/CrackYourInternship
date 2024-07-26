@@ -1,5 +1,5 @@
 class Solution {
-public:
+public :
     int search(vector<int>& nums, int target) {
         int n = nums.size();
         int start = 0;
