@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        if (needle.empty()) return 0;
+
+        // Use the find method to locate the first occurrence of needle in haystack
+        size_t index = haystack.find(needle);
+
+        // If the substring is not found, find() returns std::string::npos
+        if (index != string::npos) {
+            return index;
+        } else {
+            return -1;
+        }
+    }
+};
