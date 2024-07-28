@@ -1,0 +1,32 @@
+class Solution {
+public:
+    string reverseWords(string s) {
+        int n = s.length();
+
+        string temp = "" , ans = "";
+        vector<string>v;
+        for(int i = 0; i < n; i++){
+            if(s[i] == ' '){
+                if(temp.length() != 0){
+                    v.push_back(temp);
+                    temp = "";
+                }
+            }
+            else{
+                temp += s[i]; // ensures the last word is included if there is no trailing space in the string.
+            }
+        }
+
+        if(temp.size() != 0){
+            v.push_back(temp);
+        }
+
+        for(int i = v.size() - 1; i >= 0; i--){
+            ans += v[i] + " ";
+        }
+        if(!ans.empty()){
+            ans.pop_back(); // removes the trailing space added after the last word.
+        }
+        return ans;
+    }
+};
