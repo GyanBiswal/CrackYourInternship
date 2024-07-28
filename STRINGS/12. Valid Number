@@ -1,0 +1,53 @@
+class Solution {
+public:
+    bool isNumber(string s) {
+        bool digitSeen = false, eSeen = false, dotSeen = false;
+        int countPlusMinus = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s[i];
+
+            // 1. Digit
+            if (isdigit(ch)) {
+                digitSeen = true;
+            }
+            // 2. Plus or minus sign
+            else if (ch == '+' || ch == '-') {
+                // Sign is allowed only at the start or immediately after an 'e' or 'E'
+                if (countPlusMinus > 1 || (i > 0 && s[i-1] != 'e' && s[i-1] != 'E')) {
+                    return false;
+                }
+                // Can't have +/- at the end of string
+                if (i == s.length() - 1) {
+                    return false;
+                }
+                countPlusMinus++;
+            }
+            // 3. Dot
+            else if (ch == '.') {
+                // Can't have dot after 'e' or 'E' or after another dot
+                if (eSeen || dotSeen) {
+                    return false;
+                }
+                dotSeen = true;
+            }
+            // 4. 'e' or 'E'
+            else if (ch == 'e' || ch == 'E') {
+                // Can't have two 'e'/'E', can't have 'e'/'E' before any digit, can't have 'e'/'E' at the end
+                if (eSeen || !digitSeen || i == s.length() - 1) {
+                    return false;
+                }
+                eSeen = true;
+                countPlusMinus = 0; // reset count for signs after 'e'
+                digitSeen = false;  // must have digits after 'e'
+            }
+            // Invalid character
+            else {
+                return false;
+            }
+        }
+
+        // Must have at least one digit
+        return digitSeen;
+    }
+};
