@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        if(strs.size() == 0) return {};
+        // Hash map to store the character frequency count as key and vector of anagrams as value
+        unordered_map<string , vector<string>> map;
+
+        for(string s : strs){
+            // Create a frequency count of characters
+            vector<int>freqArr(26 , 0);
+            for(char c : s){
+                freqArr[c - 'a']++;
+            }
+            // Convert the frequency count to a string key
+            string key = "";
+            for(int count : freqArr){
+                key += to_string(count) + "#";
+            }
+            // Use the frequency string as the key and add the original string to the map
+            map[key].push_back(s);
+        }  
+
+        vector<vector<string>> result;
+        for(auto pair : map){
+            result.push_back(pair.second);
+        }
+        return result;
+    }
+};
+
+/*
+
+Time Complexity :
+
+Character Counting: O(N) where 𝑁 is the length of the string. 
+This counting operation is performed for each string.
+
+Overall time complexity: If there are M strings and the average length of a string is
+N, the time complexity is O(M⋅N).
+
+
+Space Complexity :
+The space complexity remains O(M⋅N) due to the storage of the strings in the hash map.
+
+*/
