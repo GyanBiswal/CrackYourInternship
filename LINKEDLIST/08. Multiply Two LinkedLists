@@ -1,0 +1,37 @@
+* Linked list node structure
+struct Node
+{
+    int data;
+    Node* next;
+
+    Node(int x){
+        data = x;
+        next = NULL;
+    }
+
+};*/
+
+/*The method multiplies
+two  linked lists l1 and l2
+and returns their product*/
+
+/* Multiply contents of two linked lists */
+const int MOD = 1e9 + 7;
+// it ensures that we handle large numbers efficiently and avoid overflow.
+class solution {
+  public:
+    long long listToNumber(Node *head){
+        long long num = 0;
+        while(head != NULL){
+            num = (num * 10 + head->data) % MOD;
+            head = head->next;
+        }
+        return num;
+    }
+    long long multiplyTwoLists(Node *first, Node *second) {
+        long long num1 = listToNumber(first);
+        long long num2 = listToNumber(second);
+        long long result = (num1*num2) % MOD;
+        return result;
+    }
+};
