@@ -1,0 +1,57 @@
+/* BST Node
+struct Node
+{
+	int key;
+	struct Node *left;
+	struct Node *right;
+	
+	Node(int x){
+	    key = x;
+	    left = NULL;
+	    right = NULL;
+	}
+};
+*/
+
+// This function finds predecessor and successor of key in BST.
+// It sets pre and suc as predecessor and successor respectively
+class Solution
+{
+    public:
+    // Find max in a BST
+    Node* findMax(Node* root){
+        while(root && root->right){
+            root = root->right;
+        }
+        return root;
+    }
+    // Find min a BST
+    Node* findMin(Node* root){
+        while(root && root->left){
+            root = root->left;
+        }
+        return root;
+    }
+    void findPreSuc(Node* root, Node*& pre, Node*& suc, int key)
+    {
+        if (root == nullptr) return;
+
+        if (root->key == key) {
+            // Node with the key found
+            if (root->left) {
+                pre = findMax(root->left); // Maximum in the left subtree
+            }
+            if (root->right) {
+                suc = findMin(root->right); // Minimum in the right subtree
+            }
+        } 
+        else if (key < root->key) {
+            suc = root; // Potential successor, go left to find exact successor
+            findPreSuc(root->left, pre, suc, key);
+        } 
+        else {
+            pre = root; // Potential predecessor, go right to find exact predecessor
+            findPreSuc(root->right, pre, suc, key);
+        }
+    }
+};
