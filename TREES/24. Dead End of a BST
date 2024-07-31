@@ -1,0 +1,31 @@
+/*The Node structure is
+struct Node {
+int data;
+Node * right, * left;
+};*/
+
+/*You are required to complete below method */
+class Solution{
+  public:
+    // Helper function to check dead end in the given range
+    bool isDeadEndUtil(Node* root, int mini, int maxi) {
+        if (root == NULL) return 0;
+        
+        // If the node is a leaf
+        if (root->left == NULL && root->right == NULL) {
+            // Check if it's a dead end
+            // A node is a dead end if the range (min, max) is exhausted
+            return (root->data - mini == 1 && maxi - root->data == 1);
+
+        }
+        
+        // Recursively check left and right subtree with updated range
+        return isDeadEndUtil(root->left, mini, root->data) || 
+               isDeadEndUtil(root->right, root->data, maxi);
+    }
+
+    // Main function to initialize the range and call the helper function
+    bool isDeadEnd(Node* root) {
+        return isDeadEndUtil(root, 0, INT_MAX);
+    }
+};
