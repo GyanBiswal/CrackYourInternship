@@ -1,0 +1,34 @@
+class Solution {
+public:
+    void backtrack(vector<int>& candidates , int target , vector<vector<int>> &result , vector<int> &current , 
+    int start){
+        if(target == 0){
+            result.push_back(current);
+            return;
+        }
+        for(int i = start; i < candidates.size(); i++){
+            // Skip duplicates
+            if (i > start && candidates[i] == candidates[i - 1]) {
+                continue;
+            }
+            // If the candidate exceeds the target, no point in continuing
+            if(candidates[i] > target) continue;
+
+            // Choose the candidate
+            current.push_back(candidates[i]);
+
+            // Explore further with the next starting index
+            backtrack(candidates , target - candidates[i] , result , current , i + 1);
+
+            // Backtrack: remove the candidate
+            current.pop_back();
+        }
+    }
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        vector<vector<int>> result;
+        vector<int>current;
+        sort(candidates.begin(), candidates.end()); // Sort to handle duplicates
+        backtrack(candidates , target , result , current , 0);
+        return result;
+    }
+};
