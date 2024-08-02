@@ -1,0 +1,31 @@
+class Solution{
+	public:
+	int minCoinDp(int idx, vector<int>& nums, int amount, vector<vector<int>>& dp) {
+        // Base cases
+        if (amount == 0) return 0; // If amount is 0, no coins are needed
+        if (amount < 0 || idx < 0) return INT_MAX; // If amount is negative or index is invalid
+
+        if (dp[idx][amount] != -1) return dp[idx][amount]; // Return cached result
+
+        // Option 1: Don't take the current coin
+        int notTake = minCoinDp(idx - 1, nums, amount, dp);
+
+        // Option 2: Take the current coin, if valid
+        int take = INT_MAX;
+        if (amount >= nums[idx]) {
+            int subResult = minCoinDp(idx, nums, amount - nums[idx], dp);
+            if (subResult != INT_MAX) {
+                take = subResult + 1;
+            }
+        }
+
+        // Store and return the minimum of taking or not taking the current coin
+        return dp[idx][amount] = min(take, notTake);
+    }
+
+    int MinCoin(vector<int> nums, int amount) {
+        vector<vector<int>> dp(nums.size(), vector<int>(amount + 1, -1));
+        int result = minCoinDp(nums.size() - 1, nums, amount, dp);
+        return (result == INT_MAX) ? -1 : result; // If result is still INT_MAX, return -1
+    }
+};
