@@ -1,0 +1,39 @@
+class Solution {
+public:
+    vector<int> restoreArray(vector<vector<int>>& adjacentPairs) {
+        // 1. Build the graph
+        unordered_map<int , unordered_set<int>>graph;
+        for(auto pair : adjacentPairs){
+            graph[pair[0]].insert(pair[1]);
+            graph[pair[1]].insert(pair[0]);
+        }
+
+        // 2. Find the starting index (node with only one adjacent)
+        int start = -1;
+        for(auto pair : graph){
+            if(pair.second.size() == 1){
+                start = pair.first;
+                break;
+            }
+        }
+
+        // 3. Reconstruct the array using bfs
+        vector<int>res;
+        unordered_set<int>visited;
+        queue<int>q;
+        q.push(start);
+        visited.insert(start);
+        while(!q.empty()){
+            int curr = q.front();
+            q.pop();
+            res.push_back(curr);
+            for(int neigh : graph[curr]){
+                if(!visited.count(neigh)){
+                    visited.insert(neigh);
+                    q.push(neigh);
+                }
+            }
+        }
+        return res;
+    }
+};
