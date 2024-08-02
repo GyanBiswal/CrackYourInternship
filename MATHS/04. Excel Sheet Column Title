@@ -1,0 +1,12 @@
+class Solution {
+public:
+    string convertToTitle(int columnNumber) {
+        string result;
+        while (columnNumber > 0) {
+            columnNumber--; // Convert to 0-indexed
+            result = char(columnNumber % 26 + 'A') + result; // Find the current character
+            columnNumber /= 26; // Move to the next digit
+        }
+        return result;
+    }
+};
