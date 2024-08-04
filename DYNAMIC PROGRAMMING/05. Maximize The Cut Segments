@@ -1,0 +1,23 @@
+class Solution
+{
+    public:
+    //Function to find the maximum number of cuts.
+    int solveRec(int n , int x , int y , int z){
+        if (n < 0) return -1; // Not a valid cut
+        if (n == 0) return 0; // No more length to cut, base case
+
+        // Recursively find the maximum number of cuts
+        int count_x = solveRec(n - x, x, y, z);
+        int count_y = solveRec(n - y, x, y, z);
+        int count_z = solveRec(n - z, x, y, z);
+
+        // If any of the results are valid, take the maximum number of cuts
+        if (count_x == -1 && count_y == -1 && count_z == -1) return -1; // If all results are invalid
+
+        return 1 + max({count_x, count_y, count_z});
+    }
+    int maximizeTheCuts(int n, int x, int y, int z)
+    {
+        return solveRec(n , x , y , z);
+    }
+};
