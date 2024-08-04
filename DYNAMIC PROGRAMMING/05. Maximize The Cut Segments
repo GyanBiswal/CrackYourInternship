@@ -1,3 +1,4 @@
+// Rec
 class Solution
 {
     public:
@@ -19,5 +20,62 @@ class Solution
     int maximizeTheCuts(int n, int x, int y, int z)
     {
         return solveRec(n , x , y , z);
+    }
+};
+
+
+// Memo
+
+class Solution
+{
+    public:
+    //Function to find the maximum number of cuts.
+    int solveDp(int n , int x , int y , int z , vector<int>&dp){
+        if (n < 0) return -1; // Not a valid cut
+        if (n == 0) return 0; // No more length to cut, base case
+        
+        if(dp[n] != -1) return dp[n];
+
+        // Recursively find the maximum number of cuts
+        int count_x = solveDp(n - x, x, y, z , dp);
+        int count_y = solveDp(n - y, x, y, z , dp);
+        int count_z = solveDp(n - z, x, y, z , dp);
+
+        // If any of the results are valid, take the maximum number of cuts
+        if (count_x == -1 && count_y == -1 && count_z == -1) return -1; // If all results are invalid
+
+        return dp[n] = 1 + max({count_x, count_y, count_z});
+    }
+    int maximizeTheCuts(int n, int x, int y, int z)
+    {
+        vector<int>dp(n + 1 , -1);
+        int result = solveDp(n, x, y, z, dp);
+        return result == -1 ? 0 : result; // Return 0 if no valid cuts found
+    }
+};
+
+// Tab
+
+class Solution
+{
+    public:
+    //Function to find the maximum number of cuts.
+    int maximizeTheCuts(int n, int x, int y, int z)
+    {
+        vector<int>dp(n + 1 , INT_MIN);
+        dp[0] = 0;
+        for(int i = 1; i <= n; i++){
+            if(i-x >= 0){
+                dp[i] = max(dp[i] , 1 + dp[i-x]);
+            }
+            if(i-y >= 0){
+                dp[i] = max(dp[i] , 1 + dp[i-y]);
+            }
+            if(i-z >= 0){
+                dp[i] = max(dp[i] , 1 + dp[i-z]);
+            }
+        }
+        if(dp[n] < 0) return 0;
+        else return dp[n];
     }
 };
