@@ -1,0 +1,77 @@
+// Rec
+
+class Solution {
+public:
+    int uniquePathsRec(int m , int n){
+        if(m == 0 && n == 0) return 1;
+        if(m < 0 || n < 0) return 0;
+
+        int up = uniquePathsRec(m-1 , n);
+        int left = uniquePathsRec(m , n-1);
+        return up + left;
+    }
+    int uniquePaths(int m, int n) {
+        return uniquePathsRec(m-1,n-1);
+    }
+};
+
+/*
+
+Time Complexity : 2 ^ (m x n)
+Space Complexiy : O(path length) or O(m + n)
+
+*/
+
+
+// Memo
+
+class Solution {
+public:
+    int uniquePathsDp(int m , int n , vector<vector<int>>&dp){
+        if(m == 0 && n == 0) return 1;
+        if(m < 0 || n < 0) return 0;
+        if(dp[m][n] != -1) return dp[m][n];
+
+        int up = uniquePathsDp(m-1 , n , dp);
+        int left = uniquePathsDp(m , n-1 , dp);
+        return dp[m][n] = up + left;
+    }
+    int uniquePaths(int m, int n) {
+        vector<vector<int>>dp(m , vector<int>(n,-1));
+        return uniquePathsDp(m-1,n-1,dp);
+    }
+};
+
+/*
+
+Time Complexity : O(m x n)
+Space Complexiy : O(path length) + O(m x n) , O(n x m) is the dp array space
+
+*/
+
+
+
+// Tab
+
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        vector<vector<int>>dp(m , vector<int>(n,0));
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(i == 0 || j == 0) dp[i][j] = 1;
+                else dp[i][j] = dp[i-1][j] + dp[i][j-1];
+            }
+        }
+        return dp[m-1][n-1];
+    }
+};
+
+
+/*
+
+Time Complexity : O(m x n) , for the nested loops
+Space Complexiy : O(m x n) , for the dp array, but there is no recursion stack space
+
+*/
+
