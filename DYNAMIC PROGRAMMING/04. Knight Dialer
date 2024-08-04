@@ -1,0 +1,70 @@
+// Rec
+class Solution {
+public:
+    int M = 1e9 + 7;
+    vector<vector<int>>adj = {
+        {4,6}, // from 0
+        {6,8}, // from 1
+        {7,9}, // from 2
+        {4,8}, // from 3
+        {0,3,9}, // from 4
+        {},     // from 5
+        {0,1,7}, // from 6
+        {2,6}, // from 7
+        {1,3}, // from 8
+        {2,4} // from 9
+    };
+    int solve(int n , int cell){
+        if(n == 0) return 1;
+        int ans = 0;
+        for(int neigh : adj[cell]){
+            ans += solve(n-1 , neigh) % M;
+        }
+        return ans;
+    }
+    int knightDialer(int n) {
+        int result = 0;
+        for(int cell = 0; cell <= 9; cell++){
+            result += solve(n-1 , cell) % M;
+        }
+        return result;
+    }
+};
+
+
+// Memo
+
+class Solution {
+public:
+    int M = 1e9 + 7;
+    vector<vector<int>>adj = {
+        {4,6}, // from 0
+        {6,8}, // from 1
+        {7,9}, // from 2
+        {4,8}, // from 3
+        {0,3,9}, // from 4
+        {},     // from 5
+        {0,1,7}, // from 6
+        {2,6}, // from 7
+        {1,3}, // from 8
+        {2,4} // from 9
+    };
+    int solveDp(int n , int cell , vector<vector<int>>&dp){
+        if(n == 0) return 1;
+        if(dp[n][cell] != -1) return dp[n][cell];
+        int ans = 0;
+        for(int neigh : adj[cell]){
+            ans = (ans + solveDp(n-1 , neigh , dp)) % M;
+        }
+        return dp[n][cell] = ans;
+    }
+    int knightDialer(int n) {
+        if(n == 0) return 0;
+        vector<vector<int>>dp(n + 1, vector<int>(9 + 1, -1));
+        int result = 0;
+        for(int cell = 0; cell <= 9; cell++){
+            result = (result + solveDp(n-1 , cell , dp)) % M;
+        }
+        return result;
+    }
+};
