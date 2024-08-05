@@ -1,0 +1,112 @@
+// Rec 
+
+class Solution {
+    public:
+      int solveRec(int idx1, int idx2, string &s1, string &s2) {
+            if (idx1 >= s1.length() || idx2 >= s2.length()) {
+                return 0;
+            }
+            
+            int length = 0;
+            
+            if (s1[idx1] == s2[idx2]) {
+                // Continue the common substring
+                length = 1 + solveRec(idx1 + 1, idx2 + 1, s1, s2);
+            } 
+            else {
+                length = 0; // If characters don't match, reset the length
+            }
+            
+            return length;
+        }
+        
+        int longestCommonSubstr(string s1, string s2) {
+            int m = s1.length();
+            int n = s2.length();
+            int maxLength = 0;
+            
+            // Start the recursive process from every possible pair of indices
+            for (int i = 0; i < m; ++i) {
+                for (int j = 0; j < n; ++j) {
+                maxLength = max(maxLength, solveRec(i, j, s1, s2));
+            }
+        }
+        
+        return maxLength;
+    }
+};
+
+
+// Memo
+
+class Solution {
+public:
+    int solveDp(int idx1, int idx2, string &s1, string &s2, vector<vector<int>>& dp) {
+        if (idx1 >= s1.length() || idx2 >= s2.length()) {
+            return 0;
+        }
+        
+        // Return the memoized result if already computed
+        if (dp[idx1][idx2] != -1) {
+            return dp[idx1][idx2];
+        }
+        
+        int length = 0;
+        
+        if (s1[idx1] == s2[idx2]) {
+            // Continue the common substring
+            length = 1 + solveDp(idx1 + 1, idx2 + 1, s1, s2, dp);
+        } 
+        else {
+            length = 0; // If characters don't match, reset the length
+        }
+        
+        // Memoize and return the result
+        dp[idx1][idx2] = length;
+        return length;
+    }
+    
+    int longestCommonSubstr(string s1, string s2) {
+        int m = s1.length();
+        int n = s2.length();
+        int maxLength = 0;
+        vector<vector<int>> dp(m, vector<int>(n, -1));
+        
+        // Start the recursive process from every possible pair of indices
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                maxLength = max(maxLength, solveDp(i, j, s1, s2, dp));
+            }
+        }
+        
+        return maxLength;
+    }
+};
+
+// Tab
+
+class Solution {
+  public:
+    int longestCommonSubstr(string s1, string s2) {
+        int m = s1.length();
+        int n = s2.length();
+        int maxLength = 0;
+        vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
+            
+        for(int i = 1; i <= m; i++){
+            for(int j = 1; j <= n; j++){
+                if(s1[i - 1] == s2[j - 1]){
+                    dp[i][j] = 1 + dp[i - 1][j - 1];
+                    maxLength = max(maxLength , dp[i][j]);
+                }
+                else{
+                    dp[i][j] = 0;
+                }
+            }
+        }
+        return maxLength;
+    }
+};
+
+// Indexing: The loops use <= m and <= n because the dp table has one extra row and column 
+// to account for cases where substrings end at each position including the very start (index 0).
