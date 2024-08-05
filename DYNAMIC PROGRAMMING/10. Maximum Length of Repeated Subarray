@@ -1,0 +1,88 @@
+// Rec
+
+class Solution {
+public:
+    int solveRec(int idx1 , int idx2 , vector<int>& nums1, vector<int>& nums2){
+        if(idx1 >= nums1.size() || idx2 >= nums2.size()) return 0;
+
+        // If elements match, extend the length of common subarray
+        if(nums1[idx1] == nums2[idx2]){
+            return 1 + solveRec(idx1 + 1 , idx2 + 1 , nums1 , nums2);
+        }
+         // Return 0 if elements do not match
+        else{
+            return 0;
+        }
+    }
+    int findLength(vector<int>& nums1, vector<int>& nums2) {
+        int maxLength = 0;
+        // Try every possible starting point in A
+        for (int i = 0; i < nums1.size(); ++i) {
+            // For each starting point in A, try every possible starting point in B
+            for (int j = 0; j < nums2.size(); ++j) {
+                // Find the length of common subarray starting at (i, j)
+                maxLength = max(maxLength, solveRec(i, j, nums1, nums2));
+            }
+        }
+        return maxLength;
+    }
+};
+
+
+// Memo
+
+class Solution {
+public:
+    int solveDp(int idx1 , int idx2 , vector<int>& nums1, vector<int>& nums2 , vector<vector<int>>&dp){
+        if(idx1 >= nums1.size() || idx2 >= nums2.size()) return 0;
+
+        if(dp[idx1][idx2] != -1) return dp[idx1][idx2];
+
+        // If elements match, extend the length of common subarray
+        if(nums1[idx1] == nums2[idx2]){
+            return dp[idx1][idx2] = 1 + solveDp(idx1 + 1 , idx2 + 1 , nums1 , nums2 , dp);
+        }
+         // Return 0 if elements do not match
+        else{
+            return dp[idx1][idx2] = 0;
+        }
+    }
+    int findLength(vector<int>& nums1, vector<int>& nums2) {
+        vector<vector<int>>dp(nums1.size() , vector<int>(nums2.size() , -1));
+        int maxLength = 0;
+        // Try every possible starting point in A
+        for (int i = 0; i < nums1.size(); ++i) {
+            // For each starting point in A, try every possible starting point in B
+            for (int j = 0; j < nums2.size(); ++j) {
+                // Find the length of common subarray starting at (i, j)
+                maxLength = max(maxLength, solveDp(i, j, nums1, nums2 , dp));
+            }
+        }
+        return maxLength;
+    }
+};
+
+
+// Tab
+
+class Solution {
+public:
+    int findLength(vector<int>& nums1, vector<int>& nums2) {
+        int n = nums1.size();
+        int m = nums2.size();
+        int maxLength = 0;
+        vector<vector<int>>dp(n + 1 , vector<int>(m+1 , 0));
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j <= m; j++){
+                if(nums1[i-1] == nums2[j-1]){
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                    maxLength = max(maxLength, dp[i][j]);
+                }
+                else{
+                    dp[i][j] = 0;
+                }
+            }
+        }
+        return maxLength;
+    }
+};
