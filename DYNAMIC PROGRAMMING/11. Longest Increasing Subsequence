@@ -1,0 +1,63 @@
+// Rec
+class Solution {
+public:
+    int LisRec(vector<int>& nums , int idx , int prev_idx){
+        if(idx == nums.size()) return 0;
+
+        // not take
+        int len = 0 + LisRec(nums , idx + 1 , prev_idx);
+        // take
+        if(prev_idx == -1 || nums[idx] > nums[prev_idx]){
+            len = max(len , 1 + LisRec(nums , idx + 1 , idx));
+        }
+        return len;
+    }
+    int lengthOfLIS(vector<int>& nums) {
+        return LisRec(nums , 0 , -1);
+    }
+};
+
+// Memo
+
+class Solution {
+public:
+    int LisDp(vector<int>& nums , int idx , int prev_idx , vector<vector<int>>&dp){
+        int n = nums.size();
+        if(idx == n) return 0;
+        // since prev_idx starts from -1 , we do a coordinate change , i.e -1 will be stored at 0th index , 0 at 1th index and like-wise n at n+1th index
+        if(dp[idx][prev_idx + 1] != -1) return dp[idx][prev_idx + 1];
+        // not take
+        int len = 0 + LisDp(nums , idx + 1 , prev_idx , dp);
+        // take
+        if(prev_idx == -1 || nums[idx] > nums[prev_idx]){
+            len = max(len , 1 + LisDp(nums , idx + 1 , idx , dp));
+        }
+        return dp[idx][prev_idx + 1] = len;
+    }
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<vector<int>>dp(n , vector<int>(n+1 , -1));
+        return LisDp(nums , 0 , -1 , dp);
+    }
+};
+
+
+// Tab
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<int>dp(n , 1);
+        int maxLen = 0;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < i; j++){
+                if(nums[i] > nums[j]){
+                    dp[i] = max(dp[i] , 1 + dp[j]);
+                }
+            }
+            maxLen = max(maxLen , dp[i]);
+        }
+        return maxLen;
+    }
+};
