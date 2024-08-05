@@ -1,0 +1,74 @@
+// Rec
+
+class Solution {
+public:
+    int solveRec(int idx , string &s){
+        if(idx == s.length()) return 1; // one valid split form
+        if(s[idx] == '0') return 0; // not possible to split
+
+        // take one character 
+        int oneTake = solveRec(idx + 1 , s);
+        // take two charcter
+        int twoTake = 0;
+        if(idx < s.length() - 1){ // make sure (idx + 1) does not go out of bound
+            if(s[idx] == '1' || (s[idx] == '2' && s[idx + 1] <= '6')){ // we can only have 26 codes
+                twoTake = solveRec(idx + 2 , s);
+            }
+        }
+        return oneTake + twoTake;
+    }
+    int numDecodings(string s) {
+        return solveRec(0 , s);
+    }
+};
+
+// Memo
+
+class Solution {
+public:
+    int solveDp(int idx , string &s , vector<int> &dp){
+        if(idx == s.length()) return 1; // one valid split form
+        if(s[idx] == '0') return 0; // not possible to split
+
+        if(dp[idx] != -1) return dp[idx];
+        // take one character 
+        int oneTake = solveDp(idx + 1 , s , dp);
+        // take two charcter
+        int twoTake = 0;
+        if(idx < s.length() - 1){ // make sure (idx + 1) does not go out of bound
+            if(s[idx] == '1' || (s[idx] == '2' && s[idx + 1] <= '6')){ // we can only have 26 codes
+                twoTake = solveDp(idx + 2 , s , dp);
+            }
+        }
+        return dp[idx] = oneTake + twoTake;
+    }
+    int numDecodings(string s) {
+        vector<int>dp(s.length() , -1);
+        return solveDp(0 , s , dp);
+    }
+};
+
+
+// Tab
+
+class Solution {
+public:
+    int numDecodings(string s) {
+        int n = s.length();
+        vector<int>dp(n + 1 , 0); // dp[i] represents no. of ways to decode string s from index idx to n
+        dp[n] = 1;
+        for(int i = n-1; i >= 0; i--){
+            if(s[i] == '0') dp[i] = 0;
+            else{
+                dp[i] = dp[i+1]; // solve(idx + 1);
+                if(i < n - 1){ // solve(idx + 2)
+                    if(s[i] == '1' || (s[i] == '2' && s[i + 1] <= '6')){ // we can only have 26 codes
+                        dp[i] += dp[i + 2];
+                    }
+                }
+            }
+        }
+        return dp[0];
+    }
+};
+
