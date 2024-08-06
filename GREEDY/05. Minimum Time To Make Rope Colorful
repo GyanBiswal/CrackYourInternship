@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int minCost(string colors, vector<int>& neededTime) {
+        int ans = 0;
+        int left = 0;
+
+        for(int right = 1; right < neededTime.size(); right++){
+            // if left and right are of same color 
+            if(colors[left] == colors[right]){
+                // remove the balloon with the less needed time
+                if(neededTime[left] < neededTime[right]){
+                    ans += neededTime[left];
+                    left = right;
+                }
+                else{
+                    ans += neededTime[right];
+                }
+            }
+            else{
+                left = right;
+            }
+        }
+        return ans;
+    }
+};
