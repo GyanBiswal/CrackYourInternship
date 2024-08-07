@@ -1,0 +1,51 @@
+// Rec
+
+class Solution {
+public:
+    int solveRec(int idx , bool buy , int transactions, vector<int>& prices){
+
+        if(idx == prices.size() || transactions == 0) return 0;
+
+        // Either buy the stock or skip
+        if(buy){
+            return max(-prices[idx] + solveRec(idx + 1, false, transactions, prices) ,
+                        0 + solveRec(idx + 1, true, transactions, prices));
+        }
+        // Either sell the stock or skip
+        else{
+            return max(prices[idx] + solveRec(idx + 1, true, transactions - 1, prices) , 
+                        0 + solveRec(idx + 1, false, transactions, prices));
+        }
+    }
+    int maxProfit(int k, vector<int>& prices) {
+        return solveRec(0, true, k, prices);
+    }
+};
+
+// Memo
+
+class Solution {
+public:
+    int solveDp(int idx , bool buy , int transactions, vector<int>& prices, vector<vector<vector<int>>>&dp){
+
+        if(idx == prices.size() || transactions == 0) return 0;
+
+        if(dp[idx][buy][transactions] != -1) return dp[idx][buy][transactions];
+
+        // Either buy the stock or skip
+        if(buy){
+            return dp[idx][buy][transactions] = max(-prices[idx] + solveDp(idx + 1, false, transactions, prices, dp) ,
+                        0 + solveDp(idx + 1, true, transactions, prices, dp));
+        }
+        // Either sell the stock or skip
+        else{
+            return dp[idx][buy][transactions] = max(prices[idx] + solveDp(idx + 1, true, transactions - 1, prices, dp) , 
+                        0 + solveDp(idx + 1, false, transactions, prices, dp));
+        }
+    }
+    int maxProfit(int k, vector<int>& prices) {
+        int n = prices.size();
+        vector<vector<vector<int>>>dp(n, vector<vector<int>>(2 , vector<int>(k+1, -1))); // idx , buy , transactions
+        return solveDp(0, true, k, prices, dp);
+    }
+};
