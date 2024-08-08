@@ -1,0 +1,46 @@
+class Solution {
+public:
+    // Function to reverse the linked list
+    Node* reverse(Node* head) {
+        Node* prev = NULL;
+        Node* curr = head;
+        Node* next = NULL;
+        while (curr != NULL) {
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
+
+    // Function to compute the result
+    Node* compute(Node* head) {
+        // Step 1: Reverse the list
+        head = reverse(head);
+
+        // Step 2: Remove nodes which have a greater node on their right
+        Node* newHead = NULL;
+        Node* tail = NULL;
+        int maxSoFar = INT_MIN;
+        Node* curr = head;
+
+        while (curr != NULL) {
+            if (curr->data >= maxSoFar) {
+                Node* newNode = new Node(curr->data);
+                if (newHead == NULL) {
+                    newHead = newNode;
+                    tail = newHead;
+                } else {
+                    tail->next = newNode;
+                    tail = tail->next;
+                }
+                maxSoFar = curr->data;
+            }
+            curr = curr->next;
+        }
+
+        // Step 3: Reverse the new list to restore the original order
+        return reverse(newHead);
+    }
+};
