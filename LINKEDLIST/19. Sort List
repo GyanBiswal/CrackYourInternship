@@ -1,0 +1,74 @@
+class Solution {
+public:
+    // ListNode* merge(ListNode* list1, ListNode* list2) {
+    //     if(list1 == NULL){
+    //         return list2;
+    //     }
+    //     if(list2 == NULL){
+    //         return list1;
+    //     }
+    //     if(list1->val < list2->val){
+    //         list1->next = merge(list1->next , list2);
+    //         return list1;
+    //     }
+    //     else{
+    //         list2->next = merge(list1 , list2->next);
+    //         return list2;
+    //     }
+        
+    // }
+    ListNode* merge(ListNode* firstNode, ListNode* secondNode) {
+        ListNode* merged = new ListNode(-1); // Dummy node
+        ListNode* temp = merged;
+
+        while (firstNode != NULL && secondNode != NULL) {
+            if (firstNode->val <= secondNode->val) {
+                temp->next = firstNode;
+                firstNode = firstNode->next;
+            } else {
+                temp->next = secondNode;
+                secondNode = secondNode->next;
+            }
+            temp = temp->next;
+        }
+
+        // Append remaining nodes
+        if (firstNode != NULL) {
+            temp->next = firstNode;
+        }
+        if (secondNode != NULL) {
+            temp->next = secondNode;
+        }
+
+        ListNode* result = merged->next;
+        delete merged; // Free dummy node
+        return result;
+    }
+    ListNode* findMiddle(ListNode* head){
+        if(head == NULL || head->next == NULL) return head;
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while(fast != NULL && fast->next != NULL){
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        return slow;
+    }
+    
+    ListNode* sortList(ListNode* head) {
+        if(head == NULL || head->next == NULL) return head;
+
+        ListNode* middle = findMiddle(head);
+        ListNode* leftHead = head;
+        ListNode* rightHead = middle->next;
+
+        middle->next = NULL; // Split the list into two halves
+
+        // Recursively sort the two halves
+        leftHead = sortList(leftHead);
+        rightHead = sortList(rightHead);
+
+        // Merge the sorted halves
+        return merge(leftHead, rightHead);
+    }
+};
