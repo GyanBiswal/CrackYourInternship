@@ -1,0 +1,38 @@
+/*
+struct Node
+{
+    int data;
+    struct Node* next;
+
+    Node(int x){
+        data = x;
+        next = NULL;
+    }
+};
+*/
+class Solution {
+  public:
+    Node* divide(Node* head) {
+        Node evenDummy(-1) , oddDummy(-1);
+        Node *even = &evenDummy , *odd = &oddDummy;
+        
+        Node* curr = head;
+        while(curr != NULL){
+            if(curr->data % 2 == 0){
+                even->next = curr;
+                even = even->next;
+            }
+            else{
+                odd->next = curr;
+                odd = odd->next;
+            }
+            curr = curr->next;
+        }
+        // End of the odd list should point to NULL
+        odd->next = NULL;
+         // Combine even and odd lists
+        even->next = oddDummy.next;
+        
+        return evenDummy.next;
+    }
+};
