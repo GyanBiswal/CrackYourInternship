@@ -1,0 +1,39 @@
+class Solution {
+  public:
+    // Merge two sorted linked lists using the bottom pointers
+    Node* mergeTwoLists(Node* l1, Node* l2) {
+        Node dummy(0);
+        Node* tail = &dummy;
+
+        while (l1 != NULL && l2 != NULL) {
+            if (l1->data <= l2->data) {
+                tail->bottom = l1;
+                l1 = l1->bottom;
+            } else {
+                tail->bottom = l2;
+                l2 = l2->bottom;
+            }
+            tail = tail->bottom;
+        }
+
+        // Append the remaining nodes of l1 or l2
+        if (l1 != NULL) tail->bottom = l1;
+        else tail->bottom = l2;
+
+        return dummy.bottom;
+    }
+    // Function which returns the  root of the flattened linked list.
+    Node *flatten(Node *root) {
+        if (root == NULL || root->next == NULL) {
+            return root;
+        }
+
+        // Flatten the next list
+        root->next = flatten(root->next);
+    
+        // Merge current list with the flattened next list
+        root = mergeTwoLists(root, root->next);
+
+        return root;
+    }
+};
