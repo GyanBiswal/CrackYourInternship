@@ -1,4 +1,4 @@
-class Solution {
+class Solution{
   public:
     // Merge two sorted linked lists using the bottom pointers
     Node* mergeTwoLists(Node* l1, Node* l2) {
