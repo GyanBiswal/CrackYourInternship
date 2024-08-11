@@ -1,0 +1,22 @@
+class Solution {
+public:
+    void calculate(int n , int idx , vector<bool>&visited , int &count){
+        if(idx > n){
+            count++;
+            return;
+        }
+        for(int i = 1; i <= n; i++){
+            if(!visited[i] && (idx % i == 0 || i % idx == 0)){
+                visited[i] = true;
+                calculate(n , idx + 1 , visited , count);
+                visited[i] = false;
+            }
+        }
+    }
+    int countArrangement(int n) {
+        int count = 0;
+        vector<bool>visited(n+1, false);
+        calculate(n, 1, visited, count);
+        return count;
+    }
+};
