@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int countTrees(int n, vector<int>& dp) {
+        if (n <= 1) return 1; // Base case: 0 or 1 node has exactly one BST
+
+        if (dp[n] != -1) return dp[n]; // Return memoized result if available
+
+        int total = 0;
+        for (int i = 1; i <= n; ++i) {
+            int left = countTrees(i - 1, dp); // Number of BSTs in the left subtree
+            int right = countTrees(n - i, dp); // Number of BSTs in the right subtree
+            total += left * right; // Total BSTs with 'i' as root
+        }
+
+        dp[n] = total; // Memoize the result
+        return total;
+    }
+    int numTrees(int n) {
+        vector<int> dp(n + 1, -1);
+        return countTrees(n, dp);
+    }
+};
