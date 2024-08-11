@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int dfs(vector<vector<int>>& grid, int x, int y, int remaining) {
+        // Check for out-of-bounds or obstacle
+        if (x < 0 || y < 0 || x >= grid.size() || y >= grid[0].size() || grid[x][y] == -1) 
+            return 0;
+        
+        // Check if the current cell is the ending cell
+        if (grid[x][y] == 2) return remaining == -1 ? 1 : 0;
+        
+        // Mark the current cell as visited
+        grid[x][y] = -1;
+        remaining--;
+        
+        // Explore all four directions
+        int ans = dfs(grid, x + 1, y, remaining) + 
+                  dfs(grid, x - 1, y, remaining) + 
+                  dfs(grid, x, y + 1, remaining) + 
+                  dfs(grid, x, y - 1, remaining);
+        
+        // Backtrack
+        grid[x][y] = 0;
+        remaining++;
+        
+        return ans;
+    }
+    int uniquePathsIII(vector<vector<int>>& grid) {
+        int emptyCells = 0;
+        int startX = 0, startY = 0;
+        
+        // Find the starting point and count the empty cells
+        for (int i = 0; i < grid.size(); i++) {
+            for (int j = 0; j < grid[0].size(); j++) {
+                if (grid[i][j] == 0) 
+                    emptyCells++;
+                else if (grid[i][j] == 1) {
+                    startX = i;
+                    startY = j;
+                }
+            }
+        }
+        
+        return dfs(grid, startX, startY, emptyCells);
+    }
+};
