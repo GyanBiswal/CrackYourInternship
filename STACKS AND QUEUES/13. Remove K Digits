@@ -1,0 +1,29 @@
+class Solution {
+public:
+    string removeKdigits(string num, int k) {
+        string res = "";
+        
+        for (char ch : num) {
+            // Remove characters from the end of `res` if the current character is smaller
+            // and we still have digits to remove
+            while (!res.empty() && res.back() > ch && k > 0) {
+                res.pop_back();
+                k--;
+            }
+            // Add the current character if it's not leading zero or `res` is not empty
+            if (!res.empty() || ch != '0') {
+                res.push_back(ch);
+            }
+        }
+        
+        // If there are still digits to remove, remove them from the end
+        while (k > 0 && !res.empty()) {
+            res.pop_back();
+            k--;
+        }
+        
+        // Return "0" if the result is empty, otherwise return the result
+        return res.empty() ? "0" : res;
+
+    }
+};
