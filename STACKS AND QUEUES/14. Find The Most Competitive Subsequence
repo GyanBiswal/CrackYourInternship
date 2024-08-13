@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<int> mostCompetitive(vector<int>& nums, int k) {
+        vector<int> result;
+        int n = nums.size();
+        stack<int> stk;
+        
+        for (int i = 0; i < n; ++i) {
+            // Remove elements from stack if the current element is smaller
+            // and there are enough elements left to reach size k
+            while (!stk.empty() && stk.top() > nums[i] && (stk.size() - 1 + (n - i)) >= k) {
+                stk.pop();
+            }
+            // Add current element to the stack if we need more elements
+            if (stk.size() < k) {
+                stk.push(nums[i]);
+            }
+        }
+        
+        // Transfer elements from stack to result
+        result.resize(k);
+        for (int i = k - 1; i >= 0; --i) {
+            result[i] = stk.top();
+            stk.pop();
+        }
+        
+        return result;
+
+    }
+};
