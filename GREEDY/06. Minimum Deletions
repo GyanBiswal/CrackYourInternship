@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int minDeletions(string s) {
+        unordered_map<char , int>map;
+        for(char ch : s) map[ch]++;
+        int totalDelete = 0;
+        unordered_set<int>set;
+        for(auto pair : map){
+            int currentFreq = pair.second;
+            while(currentFreq > 0 && set.count(currentFreq)){
+                totalDelete++;
+                currentFreq--;
+            }
+            set.insert(currentFreq);
+        }
+        return totalDelete;
+    }
+};
