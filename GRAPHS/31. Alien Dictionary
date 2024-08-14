@@ -1,0 +1,63 @@
+class Solution{
+    public:
+    string findOrder(string dict[], int N, int K) {
+        vector<int> adj[K]; // Adjacency list for graph
+        vector<int> indegree(K, 0); // In-degree of nodes
+    
+        // Step 1: Build the graph based on the dictionary
+        for (int i = 0; i < N - 1; i++) {
+            string str1 = dict[i];
+            string str2 = dict[i + 1];
+            int idx1 = 0, idx2 = 0;
+    
+            // Compare characters of both strings to find the first differing character
+            while (idx1 < str1.length() && idx2 < str2.length() && str1[idx1] == str2[idx2]) {
+                idx1++;
+                idx2++;
+            }
+    
+            // If str1 is longer but str2 is a prefix, it's an invalid case
+            if (idx1 == str1.length() && idx2 < str2.length()) {
+                continue;
+            }
+            
+            if (idx1 < str1.length() && idx2 < str2.length()) {
+                int u = str1[idx1] - 'a'; // Character index of str1
+                int v = str2[idx2] - 'a'; // Character index of str2
+                if (find(adj[u].begin(), adj[u].end(), v) == adj[u].end()) { // Avoid adding duplicate edges
+                    adj[u].push_back(v);
+                    indegree[v]++;
+                }
+            }
+        }
+	    
+	    // 3. Perform Kahn's algorithm
+	    string ans;
+        queue<int> q;
+	    for (int i = 0; i < K; i++) {
+            if (indegree[i] == 0) {
+                q.push(i);
+            }
+        }
+
+        while (!q.empty()) {
+            int currNode = q.front();
+            q.pop();
+            char ch = 'a' + currNode;
+            ans += ch;
+            for (int neighbor : adj[currNode]) {
+                indegree[neighbor]--;
+                if (indegree[neighbor] == 0) {
+                    q.push(neighbor);
+                }
+            }
+        }
+    
+        // Ensure the result includes all characters
+        if (ans.length() != K) {
+            return ""; // There was a cycle or not all characters were included
+        }
+    
+        return ans;
+    }
+};
