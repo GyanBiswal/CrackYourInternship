@@ -1,0 +1,42 @@
+class Solution {
+public:
+    string decodeString(string s) {
+        stack<string> strStack; // Stack to store the strings
+        stack<int> numStack; // Stack to store the numbers
+        string currString = ""; // Current string being built
+        int currNum = 0; // Current number being built
+
+        for (char ch : s) {
+            if (isdigit(ch)) {
+                // Build the number, which could have more than one digit
+                currNum = currNum * 10 + (ch - '0');
+            } else if (ch == '[') {
+                // Push the current string and number onto their respective stacks
+                strStack.push(currString);
+                numStack.push(currNum);
+                // Reset for the new substring
+                currString = "";
+                currNum = 0;
+            } 
+            else if (ch == ']') {
+                // Pop the number of times to repeat and the previous string
+                int repeatCount = numStack.top();
+                numStack.pop();
+                string prevString = strStack.top();
+                strStack.pop();
+                // Repeat the current string and append it to the previous string
+                string temp = currString;
+                currString = prevString;
+                for (int i = 0; i < repeatCount; ++i) {
+                    currString += temp;
+                }
+            } 
+            else {
+                // Append characters to the current string
+                currString += ch;
+            }
+        }
+
+        return currString;
+    }
+};
