@@ -1,0 +1,106 @@
+// Rec
+
+class Solution
+{
+public:
+    int solveRec(int idx1, int idx2, string s, string t)
+    {
+        int n = s.length();
+        int m = t.length();
+
+        if (idx2 == m)
+            return 1; // all characters of string t have matched.
+        if (idx1 == n)
+            return 0; // there are still some charcters left to be matched in string t;
+
+        // match
+        if (s[idx1] == t[idx2])
+        {
+            return solveRec(idx1 + 1, idx2 + 1, s, t) + solveRec(idx1 + 1, idx2, s, t);
+        }
+        // not match
+        else
+        {
+            return solveRec(idx1 + 1, idx2, s, t);
+        }
+    }
+    int numDistinct(string s, string t)
+    {
+        return solveRec(0, 0, s, t);
+    }
+};
+
+// Memo
+
+class Solution
+{
+public:
+    int solveDp(int idx1, int idx2, string s, string t, vector<vector<int>> &dp)
+    {
+        int n = s.length();
+        int m = t.length();
+
+        if (idx2 == m)
+            return 1; // all characters of string t have matched.
+        if (idx1 == n)
+            return 0; // there are still some charcters left to be matched in string t;
+
+        if (dp[idx1][idx2] != -1)
+            return dp[idx1][idx2];
+
+        // match
+        if (s[idx1] == t[idx2])
+        {
+            return dp[idx1][idx2] = solveDp(idx1 + 1, idx2 + 1, s, t, dp) + solveDp(idx1 + 1, idx2, s, t, dp);
+        }
+        // not match
+        else
+        {
+            return dp[idx1][idx2] = solveDp(idx1 + 1, idx2, s, t, dp);
+        }
+    }
+    int numDistinct(string s, string t)
+    {
+        vector<vector<int>> dp(s.length(), vector<int>(t.length(), -1));
+        return solveDp(0, 0, s, t, dp);
+    }
+};
+
+// Tab
+
+class Solution
+{
+public:
+    int numDistinct(string s, string t)
+    {
+        int n = s.length();
+        int m = t.length();
+        const long long MOD = 1e9 + 7;
+        vector<vector<long long>> dp(n + 1, vector<long long>(m + 1, 0));
+
+        // Base case: when t is an empty string, there's exactly one subsequence in any string s
+        for (int i = 0; i <= n; ++i)
+        {
+            dp[i][0] = 1;
+        }
+
+        for (int i = 1; i <= n; i++)
+        {
+            for (int j = 1; j <= m; j++)
+            {
+                if (s[i - 1] == t[j - 1])
+                {
+                    // Take the character or leave it
+                    dp[i][j] = (dp[i - 1][j - 1] + dp[i - 1][j]) % MOD;
+                }
+                else
+                {
+                    // Skip the current character of s
+                    dp[i][j] = dp[i - 1][j] % MOD;
+                }
+            }
+        }
+
+        return dp[n][m];
+    }
+};
