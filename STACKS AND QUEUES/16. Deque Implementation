@@ -1,0 +1,33 @@
+// Function to push element x to the back of the deque.
+void push_back_pb(deque<int> &dq, int x) {
+    // Push the element x to the back of the deque
+    dq.push_back(x);
+}
+
+// Function to pop element from the back of the deque.
+void pop_back_ppb(deque<int> &dq) {
+    // Check if the deque is not empty
+    if (!dq.empty()) {
+        // Remove the element from the back of the deque
+        dq.pop_back();
+    } else {
+        return;  // If the deque is empty, do nothing
+    }
+}
+
+// Function to return the element from the front of the deque.
+int front_dq(deque<int> &dq) {
+    // Check if the deque is not empty
+    if (!dq.empty()) {
+        // Return the front element of the deque
+        return dq.front();
+    } else {
+        return -1;  // If the deque is empty, return -1
+    }
+}
+
+// Function to push element x to the front of the deque.
+void push_front_pf(deque<int> &dq, int x) {
+    // Push the element x to the front of the deque
+    dq.push_front(x);
+}
