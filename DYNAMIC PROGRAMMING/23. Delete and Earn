@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int deleteAndEarn(vector<int>& nums) {
+        if (nums.empty()) return 0;
+        
+        // Find the maximum value in nums to size our dp array
+        int maxNum = *max_element(nums.begin(), nums.end());
+        
+        // Create the frequency array
+        vector<int> freq(maxNum + 1, 0);
+        for (int num : nums) {
+            freq[num] += num;
+        }
+        
+        // Create the dp array
+        vector<int> dp(maxNum + 1, 0);
+        dp[1] = freq[1];
+        
+        for (int i = 2; i <= maxNum; ++i) {
+            dp[i] = max(dp[i-1], dp[i-2] + freq[i]);
+        }
+        
+        return dp[maxNum];
+    }
+};
