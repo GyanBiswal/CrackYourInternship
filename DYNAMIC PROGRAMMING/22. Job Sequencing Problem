@@ -1,0 +1,53 @@
+*
+struct Job 
+{ 
+    int id;	 // Job Id 
+    int dead; // Deadline of job 
+    int profit; // Profit if job is over before or on deadline 
+};
+*/
+
+class Solution 
+{
+    
+    
+    public:
+    //Function to find the maximum profit and the number of jobs done.
+    vector<int> JobScheduling(Job arr[], int n) 
+    { 
+        // Step 1: Sort the jobs in descending order of profit
+        sort(arr, arr + n, [](Job &a, Job &b) {
+            return a.profit > b.profit;
+        });
+
+        // Step 2: Find the maximum deadline to know the size of the slots array
+        int maxDeadline = 0;
+        for (int i = 0; i < n; i++) {
+            maxDeadline = max(maxDeadline, arr[i].dead);
+        }
+
+        // Step 3: Create a slots array to keep track of free time slots
+        vector<int> slot(maxDeadline + 1, -1);
+
+        // Variables to store the count of jobs done and the total profit
+        int jobCount = 0;
+        int maxProfit = 0;
+
+        // Step 4: Iterate through each job in sorted order
+        for (int i = 0; i < n; i++) {
+            // Try to find a slot for this job starting from its deadline
+            for (int j = arr[i].dead; j > 0; j--) {
+                if (slot[j] == -1) {
+                    // Slot is available
+                    slot[j] = arr[i].id;
+                    jobCount++;
+                    maxProfit += arr[i].profit;
+                    break;
+                }
+            }
+        }
+
+        // Step 5: Return the number of jobs done and the total profit
+        return {jobCount, maxProfit};
+    } 
+};
