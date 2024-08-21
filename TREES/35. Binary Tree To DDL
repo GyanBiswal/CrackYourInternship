@@ -1,0 +1,49 @@
+struct Node
+{
+    int data;
+    struct Node* left;
+    struct Node* right;
+
+    Node(int x){
+        data = x;
+        left = right = NULL;
+    }
+};
+ */
+
+// This function should return head to the DLL
+class Solution {
+  public:
+    Node* bToDLL(Node* root) {
+        if (!root) return nullptr;
+
+        Node* head = nullptr;  // This will be the head of the DLL
+        Node* prev = nullptr;  // This keeps track of the previous node in DLL
+
+        convertToDLL(root, &head, &prev);
+
+        return head;
+    }
+    void convertToDLL(Node* root, Node** head, Node** prev) {
+        if (!root) return;
+
+        // Recurse on the left subtree
+        convertToDLL(root->left, head, prev);
+
+        // Process the current node
+        if (*prev == nullptr) {
+            // This is the leftmost node, it becomes the head of the DLL
+            *head = root;
+        } else {
+            // Link the previous node with the current node
+            root->left = *prev;
+            (*prev)->right = root;
+        }
+
+        // Update the previous node to current node
+        *prev = root;
+
+        // Recurse on the right subtree
+        convertToDLL(root->right, head, prev);
+    }
+};
