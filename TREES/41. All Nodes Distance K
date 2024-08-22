@@ -1,0 +1,55 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<pair<int, TreeNode*>> ancestors;
+    vector<int> ans;
+
+    // Find the path from root to the target node and store the path
+    bool findAncestors(TreeNode* root, TreeNode* target) {
+        if (!root) return false;
+        if (root == target) {
+            ancestors.push_back({-1, root});
+            return true;
+        }
+        bool left = findAncestors(root->left, target);
+        bool right = findAncestors(root->right, target);
+        if (left) ancestors.push_back({1, root}); // 1 to signify left subtree
+        if (right) ancestors.push_back({0, root}); // 0 to signify right subtree
+        return left || right;
+    }
+
+    // Find all nodes at a given distance `k` from `root`
+    void findNodesAtDistanceK(TreeNode* root, int k, int depth, int child) {
+        if (!root) return;
+        if (depth == k) {
+            ans.push_back(root->val);
+            return;
+        }
+        // Avoid going back to the subtree where the ancestor was found
+        if (depth == 0 && child == 1) {
+            findNodesAtDistanceK(root->right, k, depth + 1, child);
+        } else if (depth == 0 && child == 0) {
+            findNodesAtDistanceK(root->left, k, depth + 1, child);
+        } else {
+            findNodesAtDistanceK(root->left, k, depth + 1, child);
+            findNodesAtDistanceK(root->right, k, depth + 1, child);
+        }
+    }
+
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        findAncestors(root, target);
+        for (auto [child, ptr] : ancestors) {
+            findNodesAtDistanceK(ptr, k, 0, child);
+            k--;
+        }
+        return ans;
+    }
+};
