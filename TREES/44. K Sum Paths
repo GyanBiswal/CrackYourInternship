@@ -1,0 +1,41 @@
+// User function template for C++
+
+/*
+struct Node
+{
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+*/
+class Solution {
+  public:
+    int dfs(Node *node, int k, int currentSum, unordered_map<int, int>& prefixSumCount) {
+        if (!node) return 0;
+
+        currentSum += node->data;
+        int pathCount = prefixSumCount[currentSum - k];
+
+        // Update the prefix sum count for the current path
+        prefixSumCount[currentSum]++;
+
+        // Recur for left and right subtrees
+        pathCount += dfs(node->left, k, currentSum, prefixSumCount);
+        pathCount += dfs(node->right, k, currentSum, prefixSumCount);
+
+        // Backtrack: remove the current node's value from the path sum count
+        prefixSumCount[currentSum]--;
+
+        return pathCount;
+    }
+    int sumK(Node *root, int k) {
+        unordered_map<int, int> prefixSumCount;
+        prefixSumCount[0] = 1; // Initialize to handle paths starting from the root
+        return dfs(root, k, 0, prefixSumCount);
+    }
+};
