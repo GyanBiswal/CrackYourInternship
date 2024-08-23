@@ -1,0 +1,53 @@
+class Solution {
+    // Function to find an empty location in the board, denoted by '.'
+    bool findEmptyLocation(vector<vector<char>> &board, int &row, int &col) {
+        for(row = 0; row < 9; row++) {
+            for(col = 0; col < 9; col++) {
+                if(board[row][col] == '.') {
+                    return true;  // Found an empty location
+                }
+            }
+        }
+        return false;  // No empty locations left
+    }
+
+    // Function to check if placing a character 'ch' at board[row][col] is valid
+    bool isValid(vector<vector<char>> &board, int row, int col, char ch) {
+        // Check the row for duplicates
+        for(int j = 0; j < 9; j++) {
+            if(board[row][j] == ch) return false;
+        }
+        // Check the column for duplicates
+        for(int i = 0; i < 9; i++) {
+            if(board[i][col] == ch) return false;
+        }
+        // Check the 3x3 subgrid for duplicates
+        int rf = row - (row % 3);  // Row offset for the subgrid
+        int cf = col - (col % 3);  // Column offset for the subgrid
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+                if(board[i + rf][j + cf] == ch) return false;
+            }
+        }
+        return true;  // Valid placement
+    }
+
+public:
+    // Main function to solve the Sudoku
+    bool solveSudoku(vector<vector<char>>& board) {
+        int row, col;
+        // If no empty location is found, the board is solved
+        if(!findEmptyLocation(board, row, col)) {
+            return true;
+        }
+        // Try placing numbers 1 to 9 in the empty cell
+        for(char c = '1'; c <= '9'; c++) {
+            if(isValid(board, row, col, c)) {
+                board[row][col] = c;  // Place the number
+                if(solveSudoku(board)) return true;  // Recursively solve the rest of the board
+                board[row][col] = '.';  // Backtrack if needed
+            }
+        }
+        return false;  // Trigger backtracking
+    }
+};
