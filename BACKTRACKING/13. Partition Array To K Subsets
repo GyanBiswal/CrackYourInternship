@@ -1,0 +1,40 @@
+class Solution{
+  public:
+    bool canPartition(int a[], int n, int k, int currentSum, int targetSum, int index, vector<bool>& used) {
+        // If k equals 1, the remaining elements must form the last subset, so we return true
+        if (k == 1) return true;
+        
+        // If current subset reaches the target sum, we move on to the next subset
+        if (currentSum == targetSum) {
+            return canPartition(a, n, k - 1, 0, targetSum, 0, used);
+        }
+        
+        // Try to form the current subset by including more elements
+        for (int i = index; i < n; i++) {
+            if (!used[i] && currentSum + a[i] <= targetSum) {
+                used[i] = true;
+                if (canPartition(a, n, k, currentSum + a[i], targetSum, i + 1, used)) {
+                    return true;
+                }
+                used[i] = false; // Backtrack
+            }
+        }
+        
+        return false;
+    }
+    bool isKPartitionPossible(int a[], int n, int k)
+    {
+        int totalSum = 0;
+        for (int i = 0; i < n; i++) {
+            totalSum += a[i];
+        }
+        
+        // If total sum is not divisible by k, partitioning is impossible
+        if (totalSum % k != 0) return false;
+        
+        int targetSum = totalSum / k;
+        vector<bool> used(n, false);
+        
+        return canPartition(a, n, k, 0, targetSum, 0, used);
+    }
+};
