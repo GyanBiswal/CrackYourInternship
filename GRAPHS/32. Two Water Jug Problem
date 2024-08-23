@@ -1,0 +1,65 @@
+class Solution{
+	public:
+	int gcd(int a, int b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+	int minSteps(int m, int n, int d)
+	{
+	    // Check if it's possible to measure exactly d liters
+        if (d > max(m, n) || d % gcd(m, n) != 0) {
+            return -1;
+        }
+
+        // BFS initialization
+        queue<pair<int, int>> q;
+        set<pair<int, int>> visited;
+        q.push({0, 0});
+        visited.insert({0, 0});
+        int steps = 0;
+
+        while (!q.empty()) {
+            int size = q.size();
+            for (int i = 0; i < size; ++i) {
+                int x = q.front().first;
+                int y = q.front().second;
+                q.pop();
+                
+                // Check if we have reached the goal
+                if (x == d || y == d) {
+                    return steps;
+                }
+
+                // Generate all possible states from current state
+                vector<pair<int, int>> nextStates;
+                // Fill jug m
+                nextStates.push_back({m, y});
+                // Fill jug n
+                nextStates.push_back({x, n});
+                // Empty jug m
+                nextStates.push_back({0, y});
+                // Empty jug n
+                nextStates.push_back({x, 0});
+                // Pour from jug m to jug n
+                int pourToN = min(x + y, n);
+                int newM1 = x - (pourToN - y);
+                int newN1 = pourToN;
+                nextStates.push_back({newM1, newN1});
+                // Pour from jug n to jug m
+                int pourToM = min(x + y, m);
+                int newM2 = pourToM;
+                int newN2 = y - (pourToM - x);
+                nextStates.push_back({newM2, newN2});
+                
+                // Enqueue new states if not visited
+                for (auto& state : nextStates) {
+                    if (visited.find(state) == visited.end()) {
+                        visited.insert(state);
+                        q.push(state);
+                    }
+                }
+            }
+            ++steps;
+        }
+        return -1; // If no solution is found
+	}
+};
