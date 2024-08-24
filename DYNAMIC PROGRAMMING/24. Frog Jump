@@ -12,6 +12,7 @@ public:
         }
         return func(last_stone,stones[1],1);
     }
+
     bool func(int last_stone, int curr_stone, int k)
     {
         if(curr_stone==last_stone)
