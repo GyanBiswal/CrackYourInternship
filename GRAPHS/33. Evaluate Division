@@ -42,7 +42,6 @@ public:
             double result = dfs(C, D, graph, visited);
             results.push_back(result);
         }
-
         return results;
     }
 };
