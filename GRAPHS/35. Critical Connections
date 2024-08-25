@@ -1,0 +1,36 @@
+class Solution {
+public:
+    void dfs(int u, int parent, int& time, vector<int>& disc, vector<int>& low, 
+             vector<vector<int>>& graph, vector<vector<int>>& result) {
+        disc[u] = low[u] = time++;
+        for (int v : graph[u]) {
+            if (v == parent) continue; // Ignore the edge to the parent
+            if (disc[v] == -1) { // If v is not visited
+                dfs(v, u, time, disc, low, graph, result);
+                low[u] = min(low[u], low[v]);
+                if (low[v] > disc[u]) {
+                    result.push_back({u, v});
+                }
+            } else {
+                // Update low[u] based on the discovery time of v
+                low[u] = min(low[u], disc[v]);
+            }
+        }
+    }
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        vector<vector<int>> graph(n);
+        for (auto& conn : connections) {
+            graph[conn[0]].push_back(conn[1]);
+            graph[conn[1]].push_back(conn[0]);
+        }
+
+        vector<int> disc(n, -1), low(n, -1);
+        vector<vector<int>> result;
+        int time = 0;
+
+        // Start DFS from node 0 (or any other node since the graph is connected)
+        dfs(0, -1, time, disc, low, graph, result);
+
+        return result;
+    }
+};
