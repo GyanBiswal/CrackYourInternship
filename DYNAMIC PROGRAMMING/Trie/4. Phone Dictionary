@@ -1,0 +1,56 @@
+class Solution{
+public:
+class TrieNode {
+public:
+    unordered_map<char, TrieNode*> children;
+    set<string> contacts;
+};
+
+class Trie {
+public:
+    TrieNode* root;
+    
+    Trie() {
+        root = new TrieNode();
+    }
+    
+    void insert(string contact) {
+        TrieNode* node = root;
+        for (char ch : contact) {
+            if (!node->children.count(ch)) {
+                node->children[ch] = new TrieNode();
+            }
+            node = node->children[ch];
+            node->contacts.insert(contact);  // Insert contact in lexicographical order automatically (due to set)
+        }
+    }
+    
+    vector<string> search(string prefix) {
+        TrieNode* node = root;
+        for (char ch : prefix) {
+            if (!node->children.count(ch)) {
+                return {"0"};
+            }
+            node = node->children[ch];
+        }
+        vector<string> result(node->contacts.begin(), node->contacts.end());
+        return result;
+    }
+};
+    vector<vector<string>> displayContacts(int n, string contact[], string s)
+    {
+        Trie trie;
+    for (int i = 0; i < n; ++i) {
+        trie.insert(contact[i]);
+    }
+    
+    vector<vector<string>> result;
+    string prefix = "";
+    for (char ch : s) {
+        prefix += ch;
+        result.push_back(trie.search(prefix));
+    }
+    
+    return result;
+    }
+};
