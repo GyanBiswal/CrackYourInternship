@@ -1,0 +1,82 @@
+class SegmentTree {
+private:
+    vector<int> tree;
+    vector<int> nums;
+    int size;
+
+    void build(int node, int start, int end) {
+        if (start == end) {
+            tree[node] = nums[start];
+        } else {
+            int mid = (start + end) / 2;
+            build(2 * node + 1, start, mid);
+            build(2 * node + 2, mid + 1, end);
+            tree[node] = tree[2 * node + 1] + tree[2 * node + 2];
+        }
+    }
+
+    void update(int node, int start, int end, int idx, int val) {
+        if (start == end) {
+            tree[node] = val;
+        } else {
+            int mid = (start + end) / 2;
+            if (start <= idx && idx <= mid) {
+                update(2 * node + 1, start, mid, idx, val);
+            } else {
+                update(2 * node + 2, mid + 1, end, idx, val);
+            }
+            tree[node] = tree[2 * node + 1] + tree[2 * node + 2];
+        }
+    }
+
+    int query(int node, int start, int end, int l, int r) {
+        if (r < start || end < l) {
+            return 0;
+        }
+        if (l <= start && end <= r) {
+            return tree[node];
+        }
+        int mid = (start + end) / 2;
+        int left_sum = query(2 * node + 1, start, mid, l, r);
+        int right_sum = query(2 * node + 2, mid + 1, end, l, r);
+        return left_sum + right_sum;
+    }
+
+public:
+    SegmentTree(vector<int>& nums) {
+        size = nums.size();
+        tree.resize(4 * size);
+        this->nums = nums;
+        build(0, 0, size - 1);
+    }
+
+    void update(int index, int val) {
+        update(0, 0, size - 1, index, val);
+    }
+
+    int sumRange(int left, int right) {
+        return query(0, 0, size - 1, left, right);
+    }
+};
+
+class NumArray {
+private:
+    SegmentTree* segTree;
+
+public:
+    NumArray(vector<int>& nums) {
+        segTree = new SegmentTree(nums);
+    }
+    
+    void update(int index, int val) {
+        segTree->update(index, val);
+    }
+    
+    int sumRange(int left, int right) {
+        return segTree->sumRange(left, right);
+    }
+    
+    ~NumArray() {
+        delete segTree;
+    }
+};
