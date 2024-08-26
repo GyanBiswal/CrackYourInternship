@@ -1,0 +1,63 @@
+class TrieNode {
+public:
+    unordered_map<char, TrieNode*> children;
+    bool isEnd;
+    
+    TrieNode() {
+        isEnd = false;
+    }
+};
+
+class WordDictionary {
+private:
+    TrieNode* root;
+    
+public:
+    WordDictionary() {
+        root = new TrieNode();
+    }
+    
+    void addWord(string word) {
+        TrieNode* node = root;
+        for (char ch : word) {
+            if (!node->children.count(ch)) {
+                node->children[ch] = new TrieNode();
+            }
+            node = node->children[ch];
+        }
+        node->isEnd = true;
+    }
+    
+    bool search(string word) {
+        return searchInNode(word, 0, root);
+    }
+    
+private:
+    bool searchInNode(string& word, int index, TrieNode* node) {
+        if (index == word.length()) {
+            return node->isEnd;
+        }
+        
+        char ch = word[index];
+        if (ch == '.') {
+            for (auto& [key, child] : node->children) {
+                if (searchInNode(word, index + 1, child)) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            if (!node->children.count(ch)) {
+                return false;
+            }
+            return searchInNode(word, index + 1, node->children[ch]);
+        }
+    }
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
+ */
