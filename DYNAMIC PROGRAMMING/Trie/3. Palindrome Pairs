@@ -1,0 +1,44 @@
+class Solution {
+public:
+    bool isPalindrome(const string &s) {
+        int left = 0, right = s.size() - 1;
+        while (left < right) {
+            if (s[left++] != s[right--]) return false;
+        }
+        return true;
+    }
+    vector<vector<int>> palindromePairs(vector<string>& words) {
+        unordered_map<string, int> wordMap;
+        vector<vector<int>> result;
+        
+        // Store the reverse of each word in the map with its index
+        for (int i = 0; i < words.size(); ++i) {
+            string rev = words[i];
+            reverse(rev.begin(), rev.end());
+            wordMap[rev] = i;
+        }
+        
+        // Iterate over each word
+        for (int i = 0; i < words.size(); ++i) {
+            string word = words[i];
+            int len = word.size();
+            
+            for (int j = 0; j <= len; ++j) {
+                string prefix = word.substr(0, j);
+                string suffix = word.substr(j);
+                
+                // If prefix is a palindrome and the reverse of suffix exists
+                if (isPalindrome(prefix) && wordMap.count(suffix) && wordMap[suffix] != i) {
+                    result.push_back({wordMap[suffix], i});
+                }
+                
+                // If suffix is a palindrome and the reverse of prefix exists
+                if (!suffix.empty() && isPalindrome(suffix) && wordMap.count(prefix) && wordMap[prefix] != i) {
+                    result.push_back({i, wordMap[prefix]});
+                }
+            }
+        }
+        
+        return result;
+    }
+};
