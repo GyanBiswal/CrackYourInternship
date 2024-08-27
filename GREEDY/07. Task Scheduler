@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        // Step 1: Count the frequency of each task
+        unordered_map<char, int> taskCounts;
+        for (char task : tasks) {
+            taskCounts[task]++;
+        }
+
+        // Step 2: Find the frequency of the most common task
+        int maxFreq = 0;
+        for (auto& [task, count] : taskCounts) {
+            maxFreq = max(maxFreq, count);
+        }
+
+        // Step 3: Count how many tasks have the max frequency
+        int maxCount = 0;
+        for (auto& [task, count] : taskCounts) {
+            if (count == maxFreq) {
+                maxCount++;
+            }
+        }
+
+        // Step 4: Calculate the minimum intervals required
+        int intervals = (maxFreq - 1) * (n + 1) + maxCount;
+
+        // The result is the maximum between the calculated intervals and the total number of tasks
+        return max(intervals, int(tasks.size()));
+    }
+};
